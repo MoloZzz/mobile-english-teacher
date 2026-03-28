@@ -1,1 +1,1 @@
-/** Shared app-wide types (add as needed). */
+export type { Card } from './card';

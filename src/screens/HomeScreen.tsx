@@ -1,50 +1,46 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
-import { ScreenContainer } from '../components/ScreenContainer';
-import { useAppStore } from '../store';
+import { useCardStore, useScreenStore } from '../store';
 
 export function HomeScreen() {
-  const launchCount = useAppStore((s) => s.launchCount);
-  const incrementLaunchCount = useAppStore((s) => s.incrementLaunchCount);
+  const dueCount = useCardStore((s) => s.getDueCards().length);
+  const setScreen = useScreenStore((s) => s.setScreen);
 
   return (
-    <ScreenContainer>
-      <Text style={styles.title}>Mobile English Teacher</Text>
-      <Text style={styles.meta}>Persisted opens (demo): {launchCount}</Text>
-      <Pressable
-        accessibilityRole="button"
-        onPress={incrementLaunchCount}
-        style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
-      >
-        <Text style={styles.buttonLabel}>Tap to increment</Text>
-      </Pressable>
-    </ScreenContainer>
+    <View style={styles.container}>
+      <Text style={styles.title}>Sentence Trainer</Text>
+      <Text style={styles.due}>Due cards: {dueCount}</Text>
+      <View style={styles.buttons}>
+        <Button title="Start Training" onPress={() => setScreen('training')} />
+        <View style={styles.spacer} />
+        <Button title="Add Card" onPress={() => setScreen('create')} />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#fff',
+  },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '600',
-    marginBottom: 8,
-    textAlign: 'center',
+    marginBottom: 12,
   },
-  meta: {
+  due: {
     fontSize: 16,
-    marginBottom: 16,
-    textAlign: 'center',
+    marginBottom: 24,
   },
-  button: {
-    borderWidth: 1,
-    borderColor: '#333',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+  buttons: {
+    width: '100%',
+    maxWidth: 280,
   },
-  buttonPressed: {
-    opacity: 0.7,
-  },
-  buttonLabel: {
-    fontSize: 16,
+  spacer: {
+    height: 12,
   },
 });
