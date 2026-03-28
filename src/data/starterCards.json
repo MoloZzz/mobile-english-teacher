@@ -1,281 +1,604 @@
 [
-    {
-      "context": "тобі довелось прийняти рішення під тиском",
-      "answer": "I had to make a decision under pressure",
-      "variations": ["I was forced to make a quick decision"]
-    },
-    {
-      "context": "потрібно звернути увагу на деталі",
-      "answer": "You should pay attention to the details",
-      "variations": ["Make sure you pay close attention"]
-    },
-    {
-      "context": "він взяв на себе відповідальність",
-      "answer": "He took responsibility for it",
-      "variations": ["He assumed responsibility"]
-    },
-    {
-      "context": "це має сенс",
-      "answer": "That makes sense",
-      "variations": ["It makes perfect sense"]
-    },
-    {
-      "context": "я повністю згоден",
-      "answer": "I completely agree with you",
-      "variations": ["I totally agree"]
-    },
-    {
-      "context": "нам потрібно знайти рішення",
-      "answer": "We need to find a solution",
-      "variations": ["We should come up with a solution"]
-    },
-    {
-      "context": "це залежить від ситуації",
-      "answer": "It depends on the situation",
-      "variations": ["That depends"]
-    },
-    {
-      "context": "я зіткнувся з проблемою",
-      "answer": "I ran into a problem",
-      "variations": ["I encountered an issue"]
-    },
-    {
-      "context": "нам потрібно це обговорити",
-      "answer": "We need to discuss this",
-      "variations": ["Let's talk this through"]
-    },
-    {
-      "context": "я хочу це уточнити",
-      "answer": "I'd like to clarify this",
-      "variations": ["Let me clarify"]
-    },
-    {
-      "context": "він зробив помилку",
-      "answer": "He made a mistake",
-      "variations": ["He made an error"]
-    },
-    {
-      "context": "я маю на увазі",
-      "answer": "What I mean is",
-      "variations": ["I mean"]
-    },
-    {
-      "context": "це не має значення",
-      "answer": "It doesn't matter",
-      "variations": ["That's not important"]
-    },
-    {
-      "context": "я намагаюсь зрозуміти",
-      "answer": "I'm trying to understand",
-      "variations": ["I'm trying to figure it out"]
-    },
-    {
-      "context": "ми втратили час",
-      "answer": "We wasted time",
-      "variations": ["We lost time"]
-    },
-    {
-      "context": "давай перейдемо до суті",
-      "answer": "Let's get to the point",
-      "variations": ["Let's cut to the chase"]
-    },
-    {
-      "context": "це гарна ідея",
-      "answer": "That's a good idea",
-      "variations": ["Sounds like a good idea"]
-    },
-    {
-      "context": "я не впевнений",
-      "answer": "I'm not sure",
-      "variations": ["I'm not certain"]
-    },
-    {
-      "context": "мені потрібно більше часу",
-      "answer": "I need more time",
-      "variations": ["Give me some more time"]
-    },
-    {
-      "context": "це виходить з-під контролю",
-      "answer": "It's getting out of control",
-      "variations": ["Things are getting out of hand"]
-    }
-    ,
-        {
-          "context": "потрібно перевірити логіку перед релізом",
-          "answer": "We need to double-check the logic before the release",
-          "variations": ["Let's review the logic before shipping"]
-        },
-        {
-          "context": "це може викликати проблеми в продакшені",
-          "answer": "This might cause issues in production",
-          "variations": ["This could break in production"]
-        },
-        {
-          "context": "я відтворив баг локально",
-          "answer": "I reproduced the bug locally",
-          "variations": ["I managed to reproduce it on my machine"]
-        },
-        {
-          "context": "нам потрібно покрити це тестами",
-          "answer": "We need to cover this with tests",
-          "variations": ["Let's add test coverage for this"]
-        },
-        {
-          "context": "це не масштабується",
-          "answer": "This doesn't scale",
-          "variations": ["This approach won't scale"]
-        },
-        {
-          "context": "потрібно зробити рефакторинг",
-          "answer": "This needs refactoring",
-          "variations": ["We should refactor this part"]
-        },
-        {
-          "context": "я перевірю це пізніше",
-          "answer": "I'll check this later",
-          "variations": ["I'll look into it later"]
-        },
-        {
-          "context": "це виглядає як edge case",
-          "answer": "This looks like an edge case",
-          "variations": ["This seems to be an edge case"]
-        },
-        {
-          "context": "це ламає зворотну сумісність",
-          "answer": "This breaks backward compatibility",
-          "variations": ["This is not backward compatible"]
-        },
-        {
-          "context": "ми можемо це оптимізувати",
-          "answer": "We can optimize this",
-          "variations": ["This can be optimized"]
-        },
-        {
-          "context": "це тимчасове рішення",
-          "answer": "This is a temporary workaround",
-          "variations": ["This is just a quick fix"]
-        },
-        {
-          "context": "нам потрібно це обговорити з командою",
-          "answer": "We need to discuss this with the team",
-          "variations": ["Let's bring this up with the team"]
-        },
-        {
-          "context": "я не впевнений що це правильний підхід",
-          "answer": "I'm not sure this is the right approach",
-          "variations": ["I'm not convinced this is the best approach"]
-        },
-        {
-          "context": "це може вплинути на продуктивність",
-          "answer": "This might affect performance",
-          "variations": ["This could impact performance"]
-        },
-        {
-          "context": "я подивлюсь у логи",
-          "answer": "I'll check the logs",
-          "variations": ["Let me look at the logs"]
-        },
-        {
-          "context": "потрібно обробити цей кейс",
-          "answer": "We need to handle this case",
-          "variations": ["We should account for this case"]
-        },
-        {
-          "context": "це залежить від вимог",
-          "answer": "It depends on the requirements",
-          "variations": ["That depends on the requirements"]
-        },
-        {
-          "context": "це виглядає як race condition",
-          "answer": "This looks like a race condition",
-          "variations": ["We might have a race condition here"]
-        },
-        {
-          "context": "це додає зайву складність",
-          "answer": "This adds unnecessary complexity",
-          "variations": ["This makes things more complicated"]
-        },
-        {
-          "context": "це потрібно задокументувати",
-          "answer": "This needs to be documented",
-          "variations": ["We should document this"]
-        }, {
-          "context": "давай повернемось до цього пізніше",
-          "answer": "Let's get back to this later"
-        },
-        {
-          "context": "це поза межами цього обговорення",
-          "answer": "This is outside the scope of this discussion"
-        },
-        {
-          "context": "можемо узгодити вимоги",
-          "answer": "Can we align on the requirements"
-        },
-        {
-          "context": "я хотів би додати",
-          "answer": "I'd like to add something"
-        },
-        {
-          "context": "чи правильно я розумію",
-          "answer": "Am I understanding correctly"
-        },
-        {
-          "context": "давай уточнимо",
-          "answer": "Let's clarify this"
-        },
-        {
-          "context": "це має сенс",
-          "answer": "That makes sense"
-        },
-        {
-          "context": "я не зовсім згоден",
-          "answer": "I don't completely agree"
-        },
-        {
-          "context": "давай підсумуємо",
-          "answer": "Let's summarize"
-        },
-        {
-          "context": "я перевірю і повернусь",
-          "answer": "I'll check and get back to you"
-        },{
-          "context": "я трохи зайнятий зараз",
-          "answer": "I'm a bit busy right now"
-        },
-        {
-          "context": "я зроблю це пізніше",
-          "answer": "I'll do it later"
-        },
-        {
-          "context": "це звучить добре",
-          "answer": "That sounds good"
-        },
-        {
-          "context": "я не думав про це",
-          "answer": "I didn't think about that"
-        },
-        {
-          "context": "це хороше питання",
-          "answer": "That's a good question"
-        },
-        {
-          "context": "це залежить",
-          "answer": "It depends"
-        },
-        {
-          "context": "я перевірю",
-          "answer": "I'll check"
-        },
-        {
-          "context": "я повернусь до цього",
-          "answer": "I'll get back to this"
-        },
-        {
-          "context": "це має сенс",
-          "answer": "That makes sense"
-        },
-        {
-          "context": "я спробую",
-          "answer": "I'll try"
-        }
-      ]
+  {
+    "context": "тобі довелось прийняти рішення під тиском",
+    "answer": "I had to make a decision under pressure",
+    "variations": [
+      "I was under pressure to make a decision",
+      "I had to make a call under pressure"
+    ]
+  },
+  {
+    "context": "потрібно звернути увагу на деталі",
+    "answer": "You should pay close attention to the details",
+    "variations": [
+      "Make sure you pay attention to detail",
+      "Don't overlook the details"
+    ]
+  },
+  {
+    "context": "я зіткнувся з проблемою",
+    "answer": "I ran into an issue",
+    "variations": ["I came across a problem", "I hit a roadblock"]
+  },
+  {
+    "context": "нам потрібно знайти рішення",
+    "answer": "We need to come up with a solution",
+    "variations": [
+      "We need to figure out a solution",
+      "We need to find a way forward"
+    ]
+  },
+  {
+    "context": "це виходить з-під контролю",
+    "answer": "This is getting out of hand",
+    "variations": [
+      "This is spiraling out of control",
+      "Things are getting out of control"
+    ]
+  },
+  {
+    "context": "це має сенс",
+    "answer": "That makes sense",
+    "variations": ["It makes perfect sense"]
+  },
+  {
+    "context": "я повністю згоден",
+    "answer": "I completely agree with you",
+    "variations": ["I totally agree"]
+  },
+  {
+    "context": "нам потрібно знайти рішення",
+    "answer": "We need to find a solution",
+    "variations": ["We should come up with a solution"]
+  },
+  {
+    "context": "це залежить від ситуації",
+    "answer": "It depends on the situation",
+    "variations": ["That depends"]
+  },
+  {
+    "context": "я зіткнувся з проблемою",
+    "answer": "I ran into a problem",
+    "variations": ["I encountered an issue"]
+  },
+  {
+    "context": "нам потрібно це обговорити",
+    "answer": "We need to discuss this",
+    "variations": ["Let's talk this through"]
+  },
+  {
+    "context": "я хочу це уточнити",
+    "answer": "I'd like to clarify this",
+    "variations": ["Let me clarify"]
+  },
+  {
+    "context": "він зробив помилку",
+    "answer": "He made a mistake",
+    "variations": ["He made an error"]
+  },
+  {
+    "context": "я маю на увазі",
+    "answer": "What I mean is",
+    "variations": ["I mean"]
+  },
+  {
+    "context": "це не має значення",
+    "answer": "It doesn't matter",
+    "variations": ["That's not important"]
+  },
+  {
+    "context": "я намагаюсь зрозуміти",
+    "answer": "I'm trying to understand",
+    "variations": ["I'm trying to figure it out"]
+  },
+  {
+    "context": "ми втратили час",
+    "answer": "We wasted time",
+    "variations": ["We lost time"]
+  },
+  {
+    "context": "давай перейдемо до суті",
+    "answer": "Let's get to the point",
+    "variations": ["Let's cut to the chase"]
+  },
+  {
+    "context": "це гарна ідея",
+    "answer": "That's a good idea",
+    "variations": ["Sounds like a good idea"]
+  },
+  {
+    "context": "я не впевнений",
+    "answer": "I'm not sure",
+    "variations": ["I'm not certain"]
+  },
+  {
+    "context": "мені потрібно більше часу",
+    "answer": "I need more time",
+    "variations": ["Give me some more time"]
+  },
+  {
+    "context": "це виходить з-під контролю",
+    "answer": "It's getting out of control",
+    "variations": ["Things are getting out of hand"]
+  },
+  {
+    "context": "потрібно перевірити логіку перед релізом",
+    "answer": "We need to double-check the logic before the release",
+    "variations": ["Let's review the logic before shipping"]
+  },
+  {
+    "context": "це може викликати проблеми в продакшені",
+    "answer": "This might cause issues in production",
+    "variations": ["This could break in production"]
+  },
+  {
+    "context": "я відтворив баг локально",
+    "answer": "I reproduced the bug locally",
+    "variations": ["I managed to reproduce it on my machine"]
+  },
+  {
+    "context": "нам потрібно покрити це тестами",
+    "answer": "We need to cover this with tests",
+    "variations": ["Let's add test coverage for this"]
+  },
+  {
+    "context": "це не масштабується",
+    "answer": "This doesn't scale",
+    "variations": ["This approach won't scale"]
+  },
+  {
+    "context": "потрібно зробити рефакторинг",
+    "answer": "This needs refactoring",
+    "variations": ["We should refactor this part"]
+  },
+  {
+    "context": "я перевірю це пізніше",
+    "answer": "I'll check this later",
+    "variations": ["I'll look into it later"]
+  },
+  {
+    "context": "це виглядає як edge case",
+    "answer": "This looks like an edge case",
+    "variations": ["This seems to be an edge case"]
+  },
+  {
+    "context": "це ламає зворотну сумісність",
+    "answer": "This breaks backward compatibility",
+    "variations": ["This is not backward compatible"]
+  },
+  {
+    "context": "ми можемо це оптимізувати",
+    "answer": "We can optimize this",
+    "variations": ["This can be optimized"]
+  },
+  {
+    "context": "це тимчасове рішення",
+    "answer": "This is a temporary workaround",
+    "variations": ["This is just a quick fix"]
+  },
+  {
+    "context": "нам потрібно це обговорити з командою",
+    "answer": "We need to discuss this with the team",
+    "variations": ["Let's bring this up with the team"]
+  },
+  {
+    "context": "я не впевнений що це правильний підхід",
+    "answer": "I'm not sure this is the right approach",
+    "variations": ["I'm not convinced this is the best approach"]
+  },
+  {
+    "context": "це може вплинути на продуктивність",
+    "answer": "This might affect performance",
+    "variations": ["This could impact performance"]
+  },
+  {
+    "context": "я подивлюсь у логи",
+    "answer": "I'll check the logs",
+    "variations": ["Let me look at the logs"]
+  },
+  {
+    "context": "потрібно обробити цей кейс",
+    "answer": "We need to handle this case",
+    "variations": ["We should account for this case"]
+  },
+  {
+    "context": "це залежить від вимог",
+    "answer": "It depends on the requirements",
+    "variations": ["That depends on the requirements"]
+  },
+  {
+    "context": "це виглядає як race condition",
+    "answer": "This looks like a race condition",
+    "variations": ["We might have a race condition here"]
+  },
+  {
+    "context": "це додає зайву складність",
+    "answer": "This adds unnecessary complexity",
+    "variations": ["This makes things more complicated"]
+  },
+  {
+    "context": "це потрібно задокументувати",
+    "answer": "This needs to be documented",
+    "variations": ["We should document this"]
+  },
+  {
+    "context": "давай повернемось до цього пізніше",
+    "answer": "Let's get back to this later"
+  },
+  {
+    "context": "це поза межами цього обговорення",
+    "answer": "This is outside the scope of this discussion"
+  },
+  {
+    "context": "можемо узгодити вимоги",
+    "answer": "Can we align on the requirements"
+  },
+  {
+    "context": "я хотів би додати",
+    "answer": "I'd like to add something"
+  },
+  {
+    "context": "чи правильно я розумію",
+    "answer": "Am I understanding correctly"
+  },
+  {
+    "context": "давай уточнимо",
+    "answer": "Let's clarify this"
+  },
+  {
+    "context": "це має сенс",
+    "answer": "That makes sense"
+  },
+  {
+    "context": "я не зовсім згоден",
+    "answer": "I don't completely agree"
+  },
+  {
+    "context": "давай підсумуємо",
+    "answer": "Let's summarize"
+  },
+  {
+    "context": "я перевірю і повернусь",
+    "answer": "I'll check and get back to you"
+  },
+  {
+    "context": "я трохи зайнятий зараз",
+    "answer": "I'm a bit busy right now"
+  },
+  {
+    "context": "я зроблю це пізніше",
+    "answer": "I'll do it later"
+  },
+  {
+    "context": "це звучить добре",
+    "answer": "That sounds good"
+  },
+  {
+    "context": "я не думав про це",
+    "answer": "I didn't think about that"
+  },
+  {
+    "context": "це хороше питання",
+    "answer": "That's a good question"
+  },
+  {
+    "context": "це залежить",
+    "answer": "It depends"
+  },
+  {
+    "context": "я перевірю",
+    "answer": "I'll check"
+  },
+  {
+    "context": "я повернусь до цього",
+    "answer": "I'll get back to this"
+  },
+  {
+    "context": "це має сенс",
+    "answer": "That makes sense"
+  },
+  {
+    "context": "я спробую",
+    "answer": "I'll try"
+  },
+  {
+    "context": "це може призвести до проблем",
+    "answer": "This could lead to issues",
+    "variations": [
+      "This might cause problems down the line",
+      "This could result in unexpected issues"
+    ]
+  },
+  {
+    "context": "це важко підтримувати",
+    "answer": "This is hard to maintain",
+    "variations": [
+      "This is difficult to maintain",
+      "This creates maintenance overhead"
+    ]
+  },
+  {
+    "context": "це погано спроектовано",
+    "answer": "This is poorly designed",
+    "variations": ["This design is flawed", "This has design issues"]
+  },
+  {
+    "context": "це не надійне рішення",
+    "answer": "This is not a reliable solution",
+    "variations": [
+      "This approach isn't reliable",
+      "This solution lacks reliability"
+    ]
+  },
+  {
+    "context": "це не покриває всі випадки",
+    "answer": "This doesn't cover all cases",
+    "variations": [
+      "This doesn't handle all scenarios",
+      "This misses some edge cases"
+    ]
+  },
+  {
+    "context": "це викликає неочікувану поведінку",
+    "answer": "This causes unexpected behavior",
+    "variations": [
+      "This leads to unpredictable behavior",
+      "This introduces side effects"
+    ]
+  },
+  {
+    "context": "це компроміс",
+    "answer": "This is a trade-off",
+    "variations": ["It's a trade-off situation", "We have to make a trade-off"]
+  },
+  {
+    "context": "давай не ускладнювати",
+    "answer": "Let's not overcomplicate things",
+    "variations": ["Let's keep it simple", "No need to overengineer this"]
+  },
+  {
+    "context": "це не варте зусиль",
+    "answer": "This is not worth the effort",
+    "variations": [
+      "This isn't worth it",
+      "The effort doesn't justify the outcome"
+    ]
+  },
+  {
+    "context": "це тимчасове рішення",
+    "answer": "This is a temporary workaround",
+    "variations": ["This is a stopgap solution", "This is a short-term fix"]
+  },
+  {
+    "context": "це потрібно переглянути",
+    "answer": "This needs to be revisited",
+    "variations": [
+      "We should revisit this later",
+      "This requires reconsideration"
+    ]
+  },
+  {
+    "context": "давай повернемось до цього пізніше",
+    "answer": "Let's circle back to this later",
+    "variations": ["Let's revisit this later", "We can come back to this"]
+  },
+  {
+    "context": "давай не відхилятись від теми",
+    "answer": "Let's not get sidetracked",
+    "variations": ["Let's stay on track", "Let's stick to the point"]
+  },
+  {
+    "context": "я хочу підняти питання",
+    "answer": "I'd like to raise a concern",
+    "variations": [
+      "I'd like to bring something up",
+      "I want to address an issue"
+    ]
+  },
+  {
+    "context": "це хороше зауваження",
+    "answer": "That's a valid point",
+    "variations": ["That's a fair point", "You make a good point"]
+  },
+  {
+    "context": "давай узгодимо це",
+    "answer": "Let's align on this",
+    "variations": [
+      "Let's get on the same page",
+      "Let's make sure we're aligned"
+    ]
+  },
+  {
+    "context": "я не до кінця переконаний",
+    "answer": "I'm not entirely convinced",
+    "variations": ["I have some doubts", "I'm not fully sold on this"]
+  },
+  {
+    "context": "це поза межами обговорення",
+    "answer": "This falls outside the scope",
+    "variations": ["This is out of scope", "That's beyond the scope"]
+  },
+  {
+    "context": "давай підсумуємо",
+    "answer": "Let's wrap this up",
+    "variations": ["Let's summarize", "Let's recap"]
+  },
+  {
+    "context": "давай рухатись далі",
+    "answer": "Let's move forward",
+    "variations": ["Let's proceed", "Let's move on"]
+  },
+  {
+    "context": "мені потрібно це обдумати",
+    "answer": "I need to think this through",
+    "variations": ["Let me think it over", "I need some time to consider this"]
+  },
+  {
+    "context": "це виглядає крихким",
+    "answer": "This looks brittle",
+    "variations": ["This seems fragile", "This might break easily"]
+  },
+  {
+    "context": "це не очевидно",
+    "answer": "This isn't obvious",
+    "variations": ["This is not immediately clear", "This lacks clarity"]
+  },
+  {
+    "context": "це важко читати",
+    "answer": "This is hard to read",
+    "variations": ["This hurts readability", "This is difficult to follow"]
+  },
+  {
+    "context": "це можна спростити",
+    "answer": "This can be simplified",
+    "variations": ["We can simplify this", "This could be cleaner"]
+  },
+  {
+    "context": "це дублюється",
+    "answer": "This is duplicated",
+    "variations": ["There's duplication here", "This repeats logic"]
+  },
+  {
+    "context": "це неефективно",
+    "answer": "This is inefficient",
+    "variations": ["This could be optimized", "This isn't optimal"]
+  },
+  {
+    "context": "це порушує принцип",
+    "answer": "This violates the principle",
+    "variations": ["This breaks the pattern", "This goes against the design"]
+  },
+  {
+    "context": "це приховує проблему",
+    "answer": "This masks the issue",
+    "variations": ["This hides the problem", "This conceals the issue"]
+  },
+  {
+    "context": "це залежить від контексту",
+    "answer": "This is context-dependent",
+    "variations": ["It depends on the context", "This varies based on context"]
+  },
+  {
+    "context": "це не масштабуватиметься добре",
+    "answer": "This won't scale well",
+    "variations": ["This doesn't scale", "This will become a bottleneck"]
+  },
+  {
+    "context": "нам потрібно розбити це на частини",
+    "answer": "We need to break this down",
+    "variations": [
+      "Let's split this into smaller parts",
+      "We should decompose this"
+    ]
+  },
+  {
+    "context": "давай подивимось з іншого боку",
+    "answer": "Let's look at it from a different angle",
+    "variations": ["Let's approach this differently", "Let's rethink this"]
+  },
+  {
+    "context": "це ключовий момент",
+    "answer": "This is a key point",
+    "variations": ["This is crucial", "This is the main point"]
+  },
+  {
+    "context": "це не основна проблема",
+    "answer": "This isn't the main issue",
+    "variations": ["This is not the root cause", "This is secondary"]
+  },
+  {
+    "context": "потрібно знайти першопричину",
+    "answer": "We need to identify the root cause",
+    "variations": [
+      "We need to find the root of the problem",
+      "We should investigate the root cause"
+    ]
+  },
+  {
+    "context": "це логічно випливає",
+    "answer": "This follows logically",
+    "variations": ["This makes logical sense", "This is a logical outcome"]
+  },
+  {
+    "context": "це суперечить",
+    "answer": "This contradicts that",
+    "variations": [
+      "This is inconsistent with that",
+      "This doesn't align with that"
+    ]
+  },
+  {
+    "context": "це не зовсім коректно",
+    "answer": "This isn't entirely accurate",
+    "variations": ["This is somewhat misleading", "This isn't quite right"]
+  },
+  {
+    "context": "це можна інтерпретувати по-різному",
+    "answer": "This can be interpreted differently",
+    "variations": [
+      "This is open to interpretation",
+      "This isn't strictly defined"
+    ]
+  },
+  {
+    "context": "це має побічні ефекти",
+    "answer": "This has side effects",
+    "variations": [
+      "This introduces side effects",
+      "This can cause unintended consequences"
+    ]
+  },
+  {
+    "context": "це не ідеально, але працює",
+    "answer": "It's not ideal, but it works",
+    "variations": ["It's not perfect, but it'll do", "Good enough for now"]
+  },
+  {
+    "context": "це залежить від обставин",
+    "answer": "It depends on the circumstances",
+    "variations": ["That depends on the situation", "It varies"]
+  },
+  {
+    "context": "це виглядає підозріло",
+    "answer": "This looks suspicious",
+    "variations": ["Something feels off", "This doesn't look right"]
+  },
+  {
+    "context": "це має бути ок",
+    "answer": "This should be fine",
+    "variations": ["This should work", "This ought to be okay"]
+  },
+  {
+    "context": "це може піти не так",
+    "answer": "This could go wrong",
+    "variations": ["This might backfire", "This could fail"]
+  },
+  {
+    "context": "це не проблема",
+    "answer": "That's not an issue",
+    "variations": ["No problem at all", "That works for me"]
+  },
+  {
+    "context": "це звучить розумно",
+    "answer": "That sounds reasonable",
+    "variations": ["That makes sense", "That seems fair"]
+  },
+  {
+    "context": "я схиляюсь до цього варіанту",
+    "answer": "I'm leaning towards this option",
+    "variations": [
+      "I tend to prefer this approach",
+      "I'm inclined to go with this"
+    ]
+  },
+  {
+    "context": "це потребує уточнення",
+    "answer": "This needs clarification",
+    "variations": ["This isn't clear yet", "We need to clarify this"]
+  },
+  {
+    "context": "це варто перевірити",
+    "answer": "This is worth checking",
+    "variations": ["We should verify this", "This needs to be validated"]
+  }
+]
