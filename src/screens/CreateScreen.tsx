@@ -1,125 +1,71 @@
 import { useState } from 'react';
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Button, ScrollView, Text, TextInput, View } from 'react-native';
 
+import { layout } from '../styles/shared';
 import { useCardStore, useScreenStore } from '../store';
+import { splitCommaSeparated } from '../utils/text';
 
 export function CreateScreen() {
   const addCard = useCardStore((s) => s.addCard);
-  const setScreen = useScreenStore((s) => s.setScreen);
+  const goTo = useScreenStore((s) => s.goTo);
   const [context, setContext] = useState('');
   const [answer, setAnswer] = useState('');
-  const [variationsText, setVariationsText] = useState('');
+  const [variationsRaw, setVariationsRaw] = useState('');
 
-  const contextOk = context.trim().length > 0;
-  const answerOk = answer.trim().length > 0;
-  const canSave = contextOk && answerOk;
+  const canSave =
+    context.trim().length > 0 && answer.trim().length > 0;
 
-  function handleSave() {
+  function save() {
     if (!canSave) return;
     const now = Date.now();
-    const parts = variationsText
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
+    const variations = splitCommaSeparated(variationsRaw);
     addCard({
       context: context.trim(),
       answer: answer.trim(),
-      ...(parts.length > 0 ? { variations: parts } : {}),
+      ...(variations.length > 0 ? { variations } : {}),
       createdAt: now,
       dueDate: now,
       interval: 1,
     });
-    setScreen('home');
+    goTo('home');
   }
 
   return (
     <ScrollView
-      contentContainerStyle={styles.scroll}
+      contentContainerStyle={layout.scrollContent}
       keyboardShouldPersistTaps="handled"
-      style={styles.root}
+      style={layout.screen}
     >
-      <Text style={styles.label}>Context</Text>
+      <Text style={layout.fieldLabel}>Context</Text>
       <TextInput
         multiline
         onChangeText={setContext}
         placeholder="Sentence context"
-        style={styles.inputMultiline}
+        style={layout.inputMultiline}
         textAlignVertical="top"
         value={context}
       />
-      <Text style={styles.label}>Answer</Text>
+      <Text style={layout.fieldLabel}>Answer</Text>
       <TextInput
         multiline
         onChangeText={setAnswer}
         placeholder="Correct answer"
-        style={styles.inputMultiline}
+        style={layout.inputMultiline}
         textAlignVertical="top"
         value={answer}
       />
-      <Text style={styles.label}>Variations (optional)</Text>
+      <Text style={layout.fieldLabel}>Variations (optional)</Text>
       <TextInput
-        onChangeText={setVariationsText}
+        onChangeText={setVariationsRaw}
         placeholder="synonym1, synonym2"
-        style={styles.inputSingle}
-        value={variationsText}
+        style={layout.inputSingle}
+        value={variationsRaw}
       />
-      <View style={styles.actions}>
-        <Button title="Back" onPress={() => setScreen('home')} />
-        <View style={styles.spacer} />
-        <Button
-          disabled={!canSave}
-          onPress={handleSave}
-          title="Save"
-        />
+      <View style={layout.buttonRow}>
+        <Button title="Back" onPress={() => goTo('home')} />
+        <View style={layout.hGap} />
+        <Button disabled={!canSave} onPress={save} title="Save" />
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  scroll: {
-    padding: 16,
-    paddingBottom: 32,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 6,
-  },
-  inputMultiline: {
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 4,
-    minHeight: 96,
-    marginBottom: 16,
-    padding: 8,
-    fontSize: 16,
-  },
-  inputSingle: {
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 4,
-    marginBottom: 24,
-    padding: 8,
-    fontSize: 16,
-  },
-  actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  spacer: {
-    width: 16,
-  },
-});

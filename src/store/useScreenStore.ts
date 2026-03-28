@@ -2,12 +2,12 @@ import { create } from 'zustand';
 
 export type AppScreen = 'home' | 'create' | 'training';
 
-type ScreenState = {
-  currentScreen: AppScreen;
-  setScreen: (screen: AppScreen) => void;
+type ScreenStore = {
+  screen: AppScreen;
+  goTo: (screen: AppScreen) => void;
 };
 
-export const useScreenStore = create<ScreenState>((set) => ({
-  currentScreen: 'home',
-  setScreen: (screen) => set({ currentScreen: screen }),
+export const useScreenStore = create<ScreenStore>((set) => ({
+  screen: 'home',
+  goTo: (screen) => set({ screen }),
 }));

@@ -5,26 +5,24 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import type { Card } from '../types';
 import { applySrsToCard, type SrsRating } from '../utils/srs';
 
-function createId(): string {
+function newCardId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 }
 
-let initPromise: Promise<void> | null = null;
+let rehydrateOnce: Promise<void> | null = null;
 
-type CardStore = {
+type CardsState = {
   cards: Card[];
-  /** True after AsyncStorage rehydration finishes (via `init`). */
   isHydrated: boolean;
-  /** Load persisted cards from AsyncStorage; call once on app start. */
   init: () => Promise<void>;
-  addCard: (card: Omit<Card, 'id'> & { id?: string }) => void;
+  addCard: (payload: Omit<Card, 'id'> & { id?: string }) => void;
   updateCard: (card: Card) => void;
   deleteCard: (id: string) => void;
   getDueCards: () => Card[];
   reviewCard: (id: string, rating: SrsRating) => void;
 };
 
-export const useCardStore = create<CardStore>()(
+export const useCardStore = create<CardsState>()(
   persist(
     (set, get) => ({
       cards: [],
@@ -32,8 +30,8 @@ export const useCardStore = create<CardStore>()(
 
       init: async () => {
         if (get().isHydrated) return;
-        if (!initPromise) {
-          initPromise = (async () => {
+        if (!rehydrateOnce) {
+          rehydrateOnce = (async () => {
             try {
               await useCardStore.persist.rehydrate();
             } finally {
@@ -41,18 +39,18 @@ export const useCardStore = create<CardStore>()(
             }
           })();
         }
-        await initPromise;
+        await rehydrateOnce;
       },
 
-      addCard: (input) => {
+      addCard: (payload) => {
         const card: Card = {
-          id: input.id ?? createId(),
-          context: input.context,
-          answer: input.answer,
-          variations: input.variations,
-          createdAt: input.createdAt,
-          dueDate: input.dueDate,
-          interval: input.interval,
+          id: payload.id ?? newCardId(),
+          context: payload.context,
+          answer: payload.answer,
+          variations: payload.variations,
+          createdAt: payload.createdAt,
+          dueDate: payload.dueDate,
+          interval: payload.interval,
         };
         set((s) => ({ cards: [...s.cards, card] }));
       },

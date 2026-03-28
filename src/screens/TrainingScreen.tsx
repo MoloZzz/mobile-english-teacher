@@ -9,107 +9,103 @@ import {
 } from 'react-native';
 
 import type { Card } from '../types';
+import { layout } from '../styles/shared';
 import { useCardStore, useScreenStore } from '../store';
 import type { SrsRating } from '../utils/srs';
 
-type Phase = 'typing' | 'rating';
+type Step = 'answer' | 'rate';
 
 export function TrainingScreen() {
   const reviewCard = useCardStore((s) => s.reviewCard);
-  const setScreen = useScreenStore((s) => s.setScreen);
+  const goTo = useScreenStore((s) => s.goTo);
 
-  const [queue, setQueue] = useState<Card[]>([]);
-  const [index, setIndex] = useState(0);
-  const [phase, setPhase] = useState<Phase>('typing');
-  const [userAnswer, setUserAnswer] = useState('');
+  const [dueQueue, setDueQueue] = useState<Card[]>([]);
+  const [cursor, setCursor] = useState(0);
+  const [step, setStep] = useState<Step>('answer');
+  const [draftAnswer, setDraftAnswer] = useState('');
 
   useEffect(() => {
-    const due = useCardStore.getState().getDueCards();
-    setQueue(due);
-    setIndex(0);
-    setPhase('typing');
-    setUserAnswer('');
+    setDueQueue(useCardStore.getState().getDueCards());
+    setCursor(0);
+    setStep('answer');
+    setDraftAnswer('');
   }, []);
 
-  const currentCard = index < queue.length ? queue[index] : undefined;
-  const finished = queue.length === 0 || index >= queue.length;
+  const done = dueQueue.length === 0 || cursor >= dueQueue.length;
+  const card = done ? undefined : dueQueue[cursor];
 
-  function handleShowAnswer() {
-    setPhase('rating');
-  }
-
-  function handleRating(rating: SrsRating) {
-    if (!currentCard) return;
-    reviewCard(currentCard.id, rating);
-    const next = index + 1;
-    if (next >= queue.length) {
-      setIndex(next);
-      return;
+  function submitRating(rating: SrsRating) {
+    if (!card) return;
+    reviewCard(card.id, rating);
+    const next = cursor + 1;
+    setCursor(next);
+    if (next < dueQueue.length) {
+      setStep('answer');
+      setDraftAnswer('');
     }
-    setIndex(next);
-    setPhase('typing');
-    setUserAnswer('');
   }
 
-  if (finished) {
+  if (done) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.doneText}>Done for today</Text>
-        <Button title="Back" onPress={() => setScreen('home')} />
+      <View style={layout.centered}>
+        <Text style={styles.doneLine}>Done for today</Text>
+        <Button title="Back" onPress={() => goTo('home')} />
       </View>
     );
   }
 
+  if (!card) {
+    return null;
+  }
+
   return (
-    <View style={styles.root}>
+    <View style={layout.screen}>
       <ScrollView
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={layout.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.contextLabel}>Context</Text>
-        <Text style={styles.context}>{currentCard!.context}</Text>
+        <Text style={layout.fieldLabel}>Context</Text>
+        <Text style={styles.contextBody}>{card.context}</Text>
 
-        {phase === 'typing' && (
+        {step === 'answer' && (
           <>
-            <Text style={styles.fieldLabel}>Your answer</Text>
+            <Text style={layout.fieldLabel}>Your answer</Text>
             <TextInput
               multiline
-              onChangeText={setUserAnswer}
+              onChangeText={setDraftAnswer}
               placeholder="Type your answer"
-              style={styles.input}
+              style={layout.inputMultiline}
               textAlignVertical="top"
-              value={userAnswer}
+              value={draftAnswer}
             />
-            <View style={styles.row}>
-              <Button title="Back" onPress={() => setScreen('home')} />
-              <View style={styles.hSpacer} />
-              <Button title="Show Answer" onPress={handleShowAnswer} />
+            <View style={layout.buttonRow}>
+              <Button title="Back" onPress={() => goTo('home')} />
+              <View style={layout.hGap} />
+              <Button title="Show Answer" onPress={() => setStep('rate')} />
             </View>
           </>
         )}
 
-        {phase === 'rating' && currentCard && (
+        {step === 'rate' && (
           <>
-            <Text style={styles.fieldLabel}>Correct answer</Text>
-            <Text style={styles.reveal}>{currentCard.answer}</Text>
-            {currentCard.variations && currentCard.variations.length > 0 && (
+            <Text style={layout.fieldLabel}>Correct answer</Text>
+            <Text style={styles.reveal}>{card.answer}</Text>
+            {card.variations && card.variations.length > 0 && (
               <>
-                <Text style={styles.fieldLabel}>Variations</Text>
-                <Text style={styles.reveal}>
-                  {currentCard.variations.join(', ')}
-                </Text>
+                <Text style={layout.fieldLabel}>Variations</Text>
+                <Text style={styles.reveal}>{card.variations.join(', ')}</Text>
               </>
             )}
-            <View style={[styles.rateRow, styles.rateRowTop]}>
-              <Button title="Again" onPress={() => handleRating('again')} />
+            <View style={[styles.rateRow, styles.rateRowFirst]}>
+              <Button title="Again" onPress={() => submitRating('again')} />
             </View>
             <View style={styles.rateRow}>
-              <Button title="Good" onPress={() => handleRating('good')} />
+              <Button title="Good" onPress={() => submitRating('good')} />
             </View>
             <View style={styles.rateRow}>
-              <Button title="Easy" onPress={() => handleRating('easy')} />
+              <Button title="Easy" onPress={() => submitRating('easy')} />
             </View>
-            <Button title="Back" onPress={() => setScreen('home')} />
+            <Button title="Back" onPress={() => goTo('home')} />
           </>
         )}
       </ScrollView>
@@ -118,47 +114,8 @@ export function TrainingScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  scroll: {
-    padding: 16,
-    paddingBottom: 32,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  doneText: {
-    fontSize: 20,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  contextLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 6,
-  },
-  context: {
+  contextBody: {
     fontSize: 18,
-    marginBottom: 16,
-  },
-  fieldLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 6,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 4,
-    minHeight: 100,
-    padding: 8,
-    fontSize: 16,
     marginBottom: 16,
   },
   reveal: {
@@ -168,17 +125,12 @@ const styles = StyleSheet.create({
   rateRow: {
     marginBottom: 8,
   },
-  rateRowTop: {
+  rateRowFirst: {
     marginTop: 8,
   },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  hSpacer: {
-    width: 16,
+  doneLine: {
+    fontSize: 20,
+    marginBottom: 20,
+    textAlign: 'center',
   },
 });

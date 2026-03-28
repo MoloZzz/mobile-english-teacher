@@ -1,46 +1,40 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
 
+import { layout } from '../styles/shared';
 import { useCardStore, useScreenStore } from '../store';
 
 export function HomeScreen() {
   const dueCount = useCardStore((s) => s.getDueCards().length);
-  const setScreen = useScreenStore((s) => s.setScreen);
+  const goTo = useScreenStore((s) => s.goTo);
 
   return (
-    <View style={styles.container}>
+    <View style={layout.centered}>
       <Text style={styles.title}>Sentence Trainer</Text>
-      <Text style={styles.due}>Due cards: {dueCount}</Text>
-      <View style={styles.buttons}>
-        <Button title="Start Training" onPress={() => setScreen('training')} />
-        <View style={styles.spacer} />
-        <Button title="Add Card" onPress={() => setScreen('create')} />
+      <Text style={styles.dueLine}>Due cards: {dueCount}</Text>
+      <View style={styles.actions}>
+        <Button title="Start Training" onPress={() => goTo('training')} />
+        <View style={styles.vGap} />
+        <Button title="Add Card" onPress={() => goTo('create')} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
   title: {
     fontSize: 22,
     fontWeight: '600',
     marginBottom: 12,
   },
-  due: {
+  dueLine: {
     fontSize: 16,
     marginBottom: 24,
   },
-  buttons: {
+  actions: {
     width: '100%',
     maxWidth: 280,
   },
-  spacer: {
+  vGap: {
     height: 12,
   },
 });
