@@ -1,9 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
-import type { Card } from '../types';
-import { applySrsToCard, type SrsRating } from '../utils/srs';
+import type { Card } from "../types";
+import { applySrsToCard, type SrsRating } from "../utils/srs";
+import { starterCards } from "../data/starterCards";
 
 function newCardId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -15,11 +16,13 @@ type CardsState = {
   cards: Card[];
   isHydrated: boolean;
   init: () => Promise<void>;
-  addCard: (payload: Omit<Card, 'id'> & { id?: string }) => void;
+  addCard: (payload: Omit<Card, "id"> & { id?: string }) => void;
   updateCard: (card: Card) => void;
   deleteCard: (id: string) => void;
   getDueCards: () => Card[];
   reviewCard: (id: string, rating: SrsRating) => void;
+  importStarterCards: () => void;
+  clearCards: () => void;
 };
 
 export const useCardStore = create<CardsState>()(
@@ -81,9 +84,41 @@ export const useCardStore = create<CardsState>()(
           ),
         }));
       },
+
+      importStarterCards: () => {
+        const { cards } = get();
+        console.log(
+          "importStarterCards called, current cards length:",
+          cards.length,
+        );
+        console.log("starterCards length:", starterCards.length);
+        if (cards.length > 0) {
+          console.log("Cards already exist, skipping import");
+          return;
+        }
+        const now = Date.now();
+        console.log("Importing starter cards...");
+        starterCards.forEach((starterCard, index) => {
+          console.log(`Adding card ${index + 1}:`, starterCard.context);
+          get().addCard({
+            context: starterCard.context,
+            answer: starterCard.answer,
+            variations: starterCard.variations,
+            createdAt: now,
+            dueDate: now,
+            interval: 1,
+          });
+        });
+        console.log("Import complete, new cards length:", get().cards.length);
+      },
+
+      clearCards: () => {
+        console.log("Clearing all cards");
+        set({ cards: [] });
+      },
     }),
     {
-      name: 'card-storage',
+      name: "card-storage",
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({ cards: state.cards }),
       skipHydration: true,
