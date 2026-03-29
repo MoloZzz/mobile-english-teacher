@@ -37,11 +37,18 @@ export function TrainingScreen() {
   function submitRating(rating: SrsRating) {
     if (!card) return;
     reviewCard(card.id, rating);
-    const next = cursor + 1;
-    setCursor(next);
-    if (next < dueQueue.length) {
+    if (rating === "again") {
+      // Don't move to next card, reset input and hide answer
       setStep("answer");
       setDraftAnswer("");
+    } else {
+      // Good or easy: move to next
+      const next = cursor + 1;
+      setCursor(next);
+      if (next < dueQueue.length) {
+        setStep("answer");
+        setDraftAnswer("");
+      }
     }
   }
 

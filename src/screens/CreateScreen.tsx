@@ -29,6 +29,8 @@ export function CreateScreen() {
       context: context.trim(),
       answer: answer.trim(),
       ...(variations.length > 0 ? { variations } : {}),
+      topic: "custom",
+      source: "user",
       createdAt: now,
       dueDate: now,
       interval: 1,

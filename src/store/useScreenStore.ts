@@ -1,6 +1,6 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-export type AppScreen = 'home' | 'create' | 'training';
+export type AppScreen = "home" | "create" | "training" | "topics";
 
 type ScreenStore = {
   screen: AppScreen;
@@ -8,6 +8,6 @@ type ScreenStore = {
 };
 
 export const useScreenStore = create<ScreenStore>((set) => ({
-  screen: 'home',
+  screen: "home",
   goTo: (screen) => set({ screen }),
 }));

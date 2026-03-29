@@ -1,12 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-import { CreateScreen } from './src/screens/CreateScreen';
-import { HomeScreen } from './src/screens/HomeScreen';
-import { TrainingScreen } from './src/screens/TrainingScreen';
-import { layout } from './src/styles/shared';
-import { useCardStore, useScreenStore } from './src/store';
+import { CreateScreen } from "./src/screens/CreateScreen";
+import { HomeScreen } from "./src/screens/HomeScreen";
+import { TopicsScreen } from "./src/screens/TopicsScreen";
+import { TrainingScreen } from "./src/screens/TrainingScreen";
+import { layout } from "./src/styles/shared";
+import { useCardStore, useScreenStore } from "./src/store";
 
 export default function App() {
   const isHydrated = useCardStore((s) => s.isHydrated);
@@ -24,9 +25,10 @@ export default function App() {
         </View>
       ) : (
         <>
-          {screen === 'home' && <HomeScreen />}
-          {screen === 'create' && <CreateScreen />}
-          {screen === 'training' && <TrainingScreen />}
+          {screen === "home" && <HomeScreen />}
+          {screen === "create" && <CreateScreen />}
+          {screen === "training" && <TrainingScreen />}
+          {screen === "topics" && <TopicsScreen />}
         </>
       )}
       <StatusBar style="auto" />

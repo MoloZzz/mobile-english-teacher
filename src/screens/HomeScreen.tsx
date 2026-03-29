@@ -12,6 +12,7 @@ import { useCardStore, useScreenStore } from "../store";
 
 export function HomeScreen() {
   const dueCount = useCardStore((s) => s.getDueCards().length);
+  const selectedTopic = useCardStore((s) => s.selectedTopic);
   const hasCards = useCardStore((s) => s.cards.length > 0);
   const importStarterCards = useCardStore((s) => s.importStarterCards);
   const clearCards = useCardStore((s) => s.clearCards);
@@ -22,6 +23,12 @@ export function HomeScreen() {
       <View style={styles.container}>
         <Text style={typography.title}>Sentence Trainer</Text>
 
+        <Card style={styles.topicCard}>
+          <Text style={typography.subtitle}>
+            Selected topic: {selectedTopic}
+          </Text>
+        </Card>
+
         <Card style={styles.dueCard}>
           <Text style={typography.subtitle}>Due cards: {dueCount}</Text>
         </Card>
@@ -30,6 +37,10 @@ export function HomeScreen() {
           <PrimaryButton onPress={() => goTo("training")}>
             Start Training
           </PrimaryButton>
+
+          <SecondaryButton onPress={() => goTo("topics")}>
+            Topics
+          </SecondaryButton>
 
           {!hasCards && (
             <SecondaryButton onPress={importStarterCards}>
@@ -56,6 +67,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  topicCard: {
+    marginBottom: 16,
+    minWidth: 200,
     alignItems: "center",
   },
   dueCard: {

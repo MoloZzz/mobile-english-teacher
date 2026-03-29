@@ -4,7 +4,9 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 import type { Card } from "../types";
 import { applySrsToCard, type SrsRating } from "../utils/srs";
-import { starterCards } from "../data/starterCards";
+import { cards as backendCards } from "../data/backend";
+import { cards as meetingsCards } from "../data/meetings";
+import { cards as dailyCards } from "../data/daily";
 
 function newCardId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -14,6 +16,7 @@ let rehydrateOnce: Promise<void> | null = null;
 
 type CardsState = {
   cards: Card[];
+  selectedTopic: string;
   isHydrated: boolean;
   init: () => Promise<void>;
   addCard: (payload: Omit<Card, "id"> & { id?: string }) => void;
@@ -23,12 +26,14 @@ type CardsState = {
   reviewCard: (id: string, rating: SrsRating) => void;
   importStarterCards: () => void;
   clearCards: () => void;
+  setSelectedTopic: (topic: string) => void;
 };
 
 export const useCardStore = create<CardsState>()(
   persist(
     (set, get) => ({
       cards: [],
+      selectedTopic: "All",
       isHydrated: false,
 
       init: async () => {
@@ -51,6 +56,8 @@ export const useCardStore = create<CardsState>()(
           context: payload.context,
           answer: payload.answer,
           variations: payload.variations,
+          topic: payload.topic ?? "custom",
+          source: payload.source ?? "user",
           createdAt: payload.createdAt,
           dueDate: payload.dueDate,
           interval: payload.interval,
@@ -70,10 +77,19 @@ export const useCardStore = create<CardsState>()(
 
       getDueCards: () => {
         const now = Date.now();
-        return get()
-          .cards.filter((c) => c.dueDate <= now)
-          .slice()
-          .sort((a, b) => a.dueDate - b.dueDate);
+        const { selectedTopic, cards } = get();
+        let filteredCards = cards.filter((c) => c.dueDate <= now);
+        if (selectedTopic === "All") {
+          // Shuffle for mixed deck
+          filteredCards = filteredCards.sort(() => Math.random() - 0.5);
+        } else if (selectedTopic === "Custom") {
+          filteredCards = filteredCards.filter((c) => c.source === "user");
+        } else {
+          filteredCards = filteredCards.filter(
+            (c) => c.topic === selectedTopic,
+          );
+        }
+        return filteredCards.slice().sort((a, b) => a.dueDate - b.dueDate);
       },
 
       reviewCard: (id, rating) => {
@@ -89,11 +105,30 @@ export const useCardStore = create<CardsState>()(
         const { cards } = get();
         if (cards.length > 0) return;
         const now = Date.now();
-        starterCards.forEach((starterCard) => {
+        const allStarterCards = [
+          ...backendCards.map((card) => ({
+            ...card,
+            topic: "Backend",
+            source: "starter" as const,
+          })),
+          ...meetingsCards.map((card) => ({
+            ...card,
+            topic: "Meetings",
+            source: "starter" as const,
+          })),
+          ...dailyCards.map((card) => ({
+            ...card,
+            topic: "Daily",
+            source: "starter" as const,
+          })),
+        ];
+        allStarterCards.forEach((starterCard) => {
           get().addCard({
             context: starterCard.context,
             answer: starterCard.answer,
             variations: starterCard.variations,
+            topic: starterCard.topic,
+            source: starterCard.source,
             createdAt: now,
             dueDate: now,
             interval: 1,
@@ -104,11 +139,18 @@ export const useCardStore = create<CardsState>()(
       clearCards: () => {
         set({ cards: [] });
       },
+
+      setSelectedTopic: (topic) => {
+        set({ selectedTopic: topic });
+      },
     }),
     {
       name: "card-storage",
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (state) => ({ cards: state.cards }),
+      partialize: (state) => ({
+        cards: state.cards,
+        selectedTopic: state.selectedTopic,
+      }),
       skipHydration: true,
     },
   ),
