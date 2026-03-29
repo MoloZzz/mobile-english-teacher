@@ -21,16 +21,16 @@ type CardsState = {
   learnedCardIds: string[];
   isHydrated: boolean;
   init: () => Promise<void>;
-  addCard: (payload: Omit<Card, "id"> & { id?: string }) => void;
+  addCard: (payload: Omit<Card, "id" | "isLearned"> & { id?: string }) => void;
   updateCard: (card: Card) => void;
   deleteCard: (id: string) => void;
   getDueCards: () => Card[];
   reviewCard: (id: string, rating: SrsRating) => void;
   importStarterCards: () => void;
-  clearCards: () => void;
   setSelectedTopic: (topic: string) => void;
   setLearningGoal: (goal: number) => void;
   getProgress: () => number;
+  getTopicStats: (topic: string) => { learned: number; total: number };
 };
 
 export const useCardStore = create<CardsState>()(
@@ -64,6 +64,7 @@ export const useCardStore = create<CardsState>()(
           variations: payload.variations,
           topic: payload.topic ?? "custom",
           source: payload.source ?? "user",
+          isLearned: false,
           createdAt: payload.createdAt,
           dueDate: payload.dueDate,
           interval: payload.interval,
@@ -107,16 +108,20 @@ export const useCardStore = create<CardsState>()(
         const reviewedAt = Date.now();
         set((s) => {
           const updatedCards = s.cards.map((c) =>
-            c.id === id ? applySrsToCard(c, rating, reviewedAt) : c,
+            c.id === id
+              ? {
+                  ...applySrsToCard(c, rating, reviewedAt),
+                  isLearned: rating === "know",
+                }
+              : c,
           );
-          const updatedCard = updatedCards.find((c) => c.id === id);
           let newLearnedCardIds = s.learnedCardIds;
-          if (
-            updatedCard &&
-            updatedCard.interval >= 7 &&
-            !s.learnedCardIds.includes(id)
-          ) {
+          if (rating === "know" && !s.learnedCardIds.includes(id)) {
             newLearnedCardIds = [...s.learnedCardIds, id];
+          } else if (rating === "dontKnow" && s.learnedCardIds.includes(id)) {
+            newLearnedCardIds = s.learnedCardIds.filter(
+              (learnedId) => learnedId !== id,
+            );
           }
           return {
             cards: updatedCards,
@@ -160,10 +165,6 @@ export const useCardStore = create<CardsState>()(
         });
       },
 
-      clearCards: () => {
-        set({ cards: [], learnedCardIds: [] });
-      },
-
       setSelectedTopic: (topic) => {
         set({ selectedTopic: topic });
       },
@@ -175,6 +176,28 @@ export const useCardStore = create<CardsState>()(
       getProgress: () => {
         const { learnedCardIds, learningGoal } = get();
         return learnedCardIds.length / learningGoal;
+      },
+
+      getTopicStats: (topic) => {
+        const { cards } = get();
+        if (topic === "All") {
+          return {
+            total: cards.length,
+            learned: cards.filter((c) => c.isLearned).length,
+          };
+        } else if (topic === "Custom") {
+          const filtered = cards.filter((c) => c.source === "user");
+          return {
+            total: filtered.length,
+            learned: filtered.filter((c) => c.isLearned).length,
+          };
+        } else {
+          const filtered = cards.filter((c) => c.topic === topic);
+          return {
+            total: filtered.length,
+            learned: filtered.filter((c) => c.isLearned).length,
+          };
+        }
       },
     }),
     {

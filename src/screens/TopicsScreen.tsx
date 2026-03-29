@@ -15,7 +15,29 @@ const topics = ["All", "Backend", "Meetings", "Daily", "Custom"];
 export function TopicsScreen() {
   const selectedTopic = useCardStore((s) => s.selectedTopic);
   const setSelectedTopic = useCardStore((s) => s.setSelectedTopic);
+  const cards = useCardStore((s) => s.cards);
   const goTo = useScreenStore((s) => s.goTo);
+
+  function getTopicStats(topic: string) {
+    if (topic === "All") {
+      return {
+        total: cards.length,
+        learned: cards.filter((c) => c.isLearned).length,
+      };
+    } else if (topic === "Custom") {
+      const filtered = cards.filter((c) => c.source === "user");
+      return {
+        total: filtered.length,
+        learned: filtered.filter((c) => c.isLearned).length,
+      };
+    } else {
+      const filtered = cards.filter((c) => c.topic === topic);
+      return {
+        total: filtered.length,
+        learned: filtered.filter((c) => c.isLearned).length,
+      };
+    }
+  }
 
   function selectTopic(topic: string) {
     setSelectedTopic(topic);
@@ -28,24 +50,29 @@ export function TopicsScreen() {
         <Text style={typography.title}>Select Topic</Text>
 
         <View style={styles.topics}>
-          {topics.map((topic) => (
-            <Card
-              key={topic}
-              style={[
-                styles.topicCard,
-                selectedTopic === topic && styles.selectedTopic,
-              ]}
-            >
-              <PrimaryButton
-                onPress={() => selectTopic(topic)}
-                style={styles.topicButton}
+          {topics.map((topic) => {
+            const stats = getTopicStats(topic);
+            return (
+              <Card
+                key={topic}
+                style={[
+                  styles.topicCard,
+                  selectedTopic === topic && styles.selectedTopic,
+                ]}
               >
-                <Text style={[selectedTopic === topic && styles.selectedText]}>
-                  {topic}
-                </Text>
-              </PrimaryButton>
-            </Card>
-          ))}
+                <PrimaryButton
+                  onPress={() => selectTopic(topic)}
+                  style={styles.topicButton}
+                >
+                  <Text
+                    style={[selectedTopic === topic && styles.selectedText]}
+                  >
+                    {topic} - {stats.learned} / {stats.total}
+                  </Text>
+                </PrimaryButton>
+              </Card>
+            );
+          })}
         </View>
 
         <SecondaryButton onPress={() => goTo("home")}>

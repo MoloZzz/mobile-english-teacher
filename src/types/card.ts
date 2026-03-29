@@ -7,6 +7,8 @@ export type Card = {
   topic: string;
   source: "starter" | "user";
 
+  isLearned: boolean;
+
   createdAt: number;
   dueDate: number;
   interval: number;

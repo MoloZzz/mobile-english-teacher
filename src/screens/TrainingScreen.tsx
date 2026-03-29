@@ -5,18 +5,16 @@ import type { Card } from "../types";
 import {
   Card as CardComponent,
   PrimaryButton,
-  RatingButton,
   ScreenContainer,
   SecondaryButton,
 } from "../components";
 import { layout, typography } from "../styles/shared";
 import { useCardStore, useScreenStore } from "../store";
-import type { SrsRating } from "../utils/srs";
 
-type Step = "answer" | "rate";
+type Step = "answer" | "revealed";
 
 export function TrainingScreen() {
-  const reviewCard = useCardStore((s) => s.reviewCard);
+  const updateCard = useCardStore((s) => s.updateCard);
   const goTo = useScreenStore((s) => s.goTo);
 
   const [dueQueue, setDueQueue] = useState<Card[]>([]);
@@ -34,21 +32,19 @@ export function TrainingScreen() {
   const done = dueQueue.length === 0 || cursor >= dueQueue.length;
   const card = done ? undefined : dueQueue[cursor];
 
-  function submitRating(rating: SrsRating) {
+  function markLearned() {
     if (!card) return;
-    reviewCard(card.id, rating);
-    if (rating === "dontKnow") {
-      // Don't move to next card, reset input and hide answer
+    updateCard({ ...card, isLearned: true });
+    useCardStore.getState().learnedCardIds.push(card.id);
+    nextCard();
+  }
+
+  function nextCard() {
+    const next = cursor + 1;
+    setCursor(next);
+    if (next < dueQueue.length) {
       setStep("answer");
       setDraftAnswer("");
-    } else {
-      // Know: move to next
-      const next = cursor + 1;
-      setCursor(next);
-      if (next < dueQueue.length) {
-        setStep("answer");
-        setDraftAnswer("");
-      }
     }
   }
 
@@ -94,15 +90,15 @@ export function TrainingScreen() {
               <SecondaryButton onPress={() => goTo("home")}>
                 Back
               </SecondaryButton>
-              <PrimaryButton onPress={() => setStep("rate")}>
+              <PrimaryButton onPress={() => setStep("revealed")}>
                 Show Answer
               </PrimaryButton>
             </View>
           </View>
         )}
 
-        {step === "rate" && (
-          <View style={styles.rateSection}>
+        {step === "revealed" && (
+          <View style={styles.revealedSection}>
             <CardComponent style={styles.answerCard}>
               <Text style={typography.answer}>{card.answer}</Text>
               {card.variations && card.variations.length > 0 && (
@@ -112,16 +108,11 @@ export function TrainingScreen() {
               )}
             </CardComponent>
 
-            <View style={styles.ratingButtons}>
-              <RatingButton
-                variant="dontKnow"
-                onPress={() => submitRating("dontKnow")}
-              >
-                Don't know
-              </RatingButton>
-              <RatingButton variant="know" onPress={() => submitRating("know")}>
-                Know
-              </RatingButton>
+            <View style={styles.actionButtons}>
+              <SecondaryButton onPress={nextCard}>Next</SecondaryButton>
+              <PrimaryButton onPress={markLearned}>
+                Already learned
+              </PrimaryButton>
             </View>
           </View>
         )}
@@ -155,7 +146,7 @@ const styles = StyleSheet.create({
     color: "#E2E8F0",
     textAlignVertical: "top",
   },
-  rateSection: {
+  revealedSection: {
     gap: 24,
   },
   answerCard: {
@@ -164,7 +155,9 @@ const styles = StyleSheet.create({
   variations: {
     marginTop: 8,
   },
-  ratingButtons: {
+  actionButtons: {
+    flexDirection: "row",
     gap: 12,
+    justifyContent: "center",
   },
 });

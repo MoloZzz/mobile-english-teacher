@@ -16,10 +16,33 @@ export function HomeScreen() {
   const learningGoal = useCardStore((s) => s.learningGoal);
   const learnedCount = useCardStore((s) => s.learnedCardIds.length);
   const progress = useCardStore((s) => s.getProgress());
+  const cards = useCardStore((s) => s.cards);
   const hasCards = useCardStore((s) => s.cards.length > 0);
   const importStarterCards = useCardStore((s) => s.importStarterCards);
-  const clearCards = useCardStore((s) => s.clearCards);
   const goTo = useScreenStore((s) => s.goTo);
+
+  function getTopicStats(topic: string) {
+    if (topic === "All") {
+      return {
+        total: cards.length,
+        learned: cards.filter((c) => c.isLearned).length,
+      };
+    } else if (topic === "Custom") {
+      const filtered = cards.filter((c) => c.source === "user");
+      return {
+        total: filtered.length,
+        learned: filtered.filter((c) => c.isLearned).length,
+      };
+    } else {
+      const filtered = cards.filter((c) => c.topic === topic);
+      return {
+        total: filtered.length,
+        learned: filtered.filter((c) => c.isLearned).length,
+      };
+    }
+  }
+
+  const topicStats = getTopicStats(selectedTopic);
 
   return (
     <ScreenContainer>
@@ -44,6 +67,9 @@ export function HomeScreen() {
           <Text style={typography.subtitle}>
             Selected topic: {selectedTopic}
           </Text>
+          <Text style={typography.secondary}>
+            Progress: {topicStats.learned} / {topicStats.total}
+          </Text>
         </Card>
 
         <Card style={styles.dueCard}>
@@ -62,12 +88,6 @@ export function HomeScreen() {
           {!hasCards && (
             <SecondaryButton onPress={importStarterCards}>
               Import Starter Pack
-            </SecondaryButton>
-          )}
-
-          {hasCards && (
-            <SecondaryButton onPress={clearCards}>
-              Clear Cards (Debug)
             </SecondaryButton>
           )}
 
