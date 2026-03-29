@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 interface RatingButtonProps {
   children: ReactNode;
   onPress: () => void;
-  variant: "again" | "good" | "easy";
+  variant: "dontKnow" | "know";
   style?: any;
 }
 
@@ -16,11 +16,9 @@ export function RatingButton({
 }: RatingButtonProps) {
   const getBackgroundColor = () => {
     switch (variant) {
-      case "again":
+      case "dontKnow":
         return "#EF4444";
-      case "good":
-        return "#3B82F6";
-      case "easy":
+      case "know":
         return "#10B981";
       default:
         return "#3B82F6";

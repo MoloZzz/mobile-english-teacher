@@ -13,6 +13,9 @@ import { useCardStore, useScreenStore } from "../store";
 export function HomeScreen() {
   const dueCount = useCardStore((s) => s.getDueCards().length);
   const selectedTopic = useCardStore((s) => s.selectedTopic);
+  const learningGoal = useCardStore((s) => s.learningGoal);
+  const learnedCount = useCardStore((s) => s.learnedCardIds.length);
+  const progress = useCardStore((s) => s.getProgress());
   const hasCards = useCardStore((s) => s.cards.length > 0);
   const importStarterCards = useCardStore((s) => s.importStarterCards);
   const clearCards = useCardStore((s) => s.clearCards);
@@ -22,6 +25,20 @@ export function HomeScreen() {
     <ScreenContainer>
       <View style={styles.container}>
         <Text style={typography.title}>Sentence Trainer</Text>
+
+        <Card style={styles.progressCard}>
+          <Text style={typography.subtitle}>
+            Goal: {learningGoal} collocations
+          </Text>
+          <View style={styles.progressBar}>
+            <View
+              style={[styles.progressFill, { width: `${progress * 100}%` }]}
+            />
+          </View>
+          <Text style={typography.secondary}>
+            {learnedCount} / {learningGoal} learned
+          </Text>
+        </Card>
 
         <Card style={styles.topicCard}>
           <Text style={typography.subtitle}>
@@ -68,6 +85,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  progressCard: {
+    marginBottom: 16,
+    minWidth: 280,
+    alignItems: "center",
+  },
+  progressBar: {
+    width: "100%",
+    height: 8,
+    backgroundColor: "#1E293B",
+    borderRadius: 4,
+    marginVertical: 8,
+  },
+  progressFill: {
+    height: "100%",
+    backgroundColor: "#10B981",
+    borderRadius: 4,
   },
   topicCard: {
     marginBottom: 16,

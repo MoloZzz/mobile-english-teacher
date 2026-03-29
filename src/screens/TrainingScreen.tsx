@@ -37,12 +37,12 @@ export function TrainingScreen() {
   function submitRating(rating: SrsRating) {
     if (!card) return;
     reviewCard(card.id, rating);
-    if (rating === "again") {
+    if (rating === "dontKnow") {
       // Don't move to next card, reset input and hide answer
       setStep("answer");
       setDraftAnswer("");
     } else {
-      // Good or easy: move to next
+      // Know: move to next
       const next = cursor + 1;
       setCursor(next);
       if (next < dueQueue.length) {
@@ -114,16 +114,13 @@ export function TrainingScreen() {
 
             <View style={styles.ratingButtons}>
               <RatingButton
-                variant="again"
-                onPress={() => submitRating("again")}
+                variant="dontKnow"
+                onPress={() => submitRating("dontKnow")}
               >
-                Again
+                Don't know
               </RatingButton>
-              <RatingButton variant="good" onPress={() => submitRating("good")}>
-                Good
-              </RatingButton>
-              <RatingButton variant="easy" onPress={() => submitRating("easy")}>
-                Easy
+              <RatingButton variant="know" onPress={() => submitRating("know")}>
+                Know
               </RatingButton>
             </View>
           </View>

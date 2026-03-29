@@ -17,6 +17,8 @@ let rehydrateOnce: Promise<void> | null = null;
 type CardsState = {
   cards: Card[];
   selectedTopic: string;
+  learningGoal: number;
+  learnedCardIds: string[];
   isHydrated: boolean;
   init: () => Promise<void>;
   addCard: (payload: Omit<Card, "id"> & { id?: string }) => void;
@@ -27,6 +29,8 @@ type CardsState = {
   importStarterCards: () => void;
   clearCards: () => void;
   setSelectedTopic: (topic: string) => void;
+  setLearningGoal: (goal: number) => void;
+  getProgress: () => number;
 };
 
 export const useCardStore = create<CardsState>()(
@@ -34,6 +38,8 @@ export const useCardStore = create<CardsState>()(
     (set, get) => ({
       cards: [],
       selectedTopic: "All",
+      learningGoal: 3000,
+      learnedCardIds: [],
       isHydrated: false,
 
       init: async () => {
@@ -72,7 +78,12 @@ export const useCardStore = create<CardsState>()(
       },
 
       deleteCard: (id) => {
-        set((s) => ({ cards: s.cards.filter((c) => c.id !== id) }));
+        set((s) => ({
+          cards: s.cards.filter((c) => c.id !== id),
+          learnedCardIds: s.learnedCardIds.filter(
+            (learnedId) => learnedId !== id,
+          ),
+        }));
       },
 
       getDueCards: () => {
@@ -94,11 +105,24 @@ export const useCardStore = create<CardsState>()(
 
       reviewCard: (id, rating) => {
         const reviewedAt = Date.now();
-        set((s) => ({
-          cards: s.cards.map((c) =>
+        set((s) => {
+          const updatedCards = s.cards.map((c) =>
             c.id === id ? applySrsToCard(c, rating, reviewedAt) : c,
-          ),
-        }));
+          );
+          const updatedCard = updatedCards.find((c) => c.id === id);
+          let newLearnedCardIds = s.learnedCardIds;
+          if (
+            updatedCard &&
+            updatedCard.interval >= 7 &&
+            !s.learnedCardIds.includes(id)
+          ) {
+            newLearnedCardIds = [...s.learnedCardIds, id];
+          }
+          return {
+            cards: updatedCards,
+            learnedCardIds: newLearnedCardIds,
+          };
+        });
       },
 
       importStarterCards: () => {
@@ -137,11 +161,20 @@ export const useCardStore = create<CardsState>()(
       },
 
       clearCards: () => {
-        set({ cards: [] });
+        set({ cards: [], learnedCardIds: [] });
       },
 
       setSelectedTopic: (topic) => {
         set({ selectedTopic: topic });
+      },
+
+      setLearningGoal: (goal) => {
+        set({ learningGoal: goal });
+      },
+
+      getProgress: () => {
+        const { learnedCardIds, learningGoal } = get();
+        return learnedCardIds.length / learningGoal;
       },
     }),
     {
@@ -150,6 +183,8 @@ export const useCardStore = create<CardsState>()(
       partialize: (state) => ({
         cards: state.cards,
         selectedTopic: state.selectedTopic,
+        learningGoal: state.learningGoal,
+        learnedCardIds: state.learnedCardIds,
       }),
       skipHydration: true,
     },
