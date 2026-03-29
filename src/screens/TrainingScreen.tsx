@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+
+import type { Card } from "../types";
 import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+  Card as CardComponent,
+  PrimaryButton,
+  RatingButton,
+  ScreenContainer,
+  SecondaryButton,
+} from "../components";
+import { layout, typography } from "../styles/shared";
+import { useCardStore, useScreenStore } from "../store";
+import type { SrsRating } from "../utils/srs";
 
-import type { Card } from '../types';
-import { layout } from '../styles/shared';
-import { useCardStore, useScreenStore } from '../store';
-import type { SrsRating } from '../utils/srs';
-
-type Step = 'answer' | 'rate';
+type Step = "answer" | "rate";
 
 export function TrainingScreen() {
   const reviewCard = useCardStore((s) => s.reviewCard);
@@ -21,14 +21,14 @@ export function TrainingScreen() {
 
   const [dueQueue, setDueQueue] = useState<Card[]>([]);
   const [cursor, setCursor] = useState(0);
-  const [step, setStep] = useState<Step>('answer');
-  const [draftAnswer, setDraftAnswer] = useState('');
+  const [step, setStep] = useState<Step>("answer");
+  const [draftAnswer, setDraftAnswer] = useState("");
 
   useEffect(() => {
     setDueQueue(useCardStore.getState().getDueCards());
     setCursor(0);
-    setStep('answer');
-    setDraftAnswer('');
+    setStep("answer");
+    setDraftAnswer("");
   }, []);
 
   const done = dueQueue.length === 0 || cursor >= dueQueue.length;
@@ -40,17 +40,21 @@ export function TrainingScreen() {
     const next = cursor + 1;
     setCursor(next);
     if (next < dueQueue.length) {
-      setStep('answer');
-      setDraftAnswer('');
+      setStep("answer");
+      setDraftAnswer("");
     }
   }
 
   if (done) {
     return (
-      <View style={layout.centered}>
-        <Text style={styles.doneLine}>Done for today</Text>
-        <Button title="Back" onPress={() => goTo('home')} />
-      </View>
+      <ScreenContainer>
+        <View style={styles.centered}>
+          <Text style={typography.title}>Done for today</Text>
+          <SecondaryButton onPress={() => goTo("home")}>
+            Back to Home
+          </SecondaryButton>
+        </View>
+      </ScreenContainer>
     );
   }
 
@@ -59,78 +63,104 @@ export function TrainingScreen() {
   }
 
   return (
-    <View style={layout.screen}>
+    <ScreenContainer>
       <ScrollView
-        contentContainerStyle={layout.scrollContent}
+        contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={layout.fieldLabel}>Context</Text>
-        <Text style={styles.contextBody}>{card.context}</Text>
+        <CardComponent style={styles.contextCard}>
+          <Text style={typography.context}>{card.context}</Text>
+        </CardComponent>
 
-        {step === 'answer' && (
-          <>
-            <Text style={layout.fieldLabel}>Your answer</Text>
+        {step === "answer" && (
+          <View style={styles.answerSection}>
             <TextInput
               multiline
               onChangeText={setDraftAnswer}
-              placeholder="Type your answer"
-              style={layout.inputMultiline}
+              placeholder="Type your answer..."
+              placeholderTextColor="#94A3B8"
+              style={styles.input}
               textAlignVertical="top"
               value={draftAnswer}
             />
             <View style={layout.buttonRow}>
-              <Button title="Back" onPress={() => goTo('home')} />
-              <View style={layout.hGap} />
-              <Button title="Show Answer" onPress={() => setStep('rate')} />
+              <SecondaryButton onPress={() => goTo("home")}>
+                Back
+              </SecondaryButton>
+              <PrimaryButton onPress={() => setStep("rate")}>
+                Show Answer
+              </PrimaryButton>
             </View>
-          </>
+          </View>
         )}
 
-        {step === 'rate' && (
-          <>
-            <Text style={layout.fieldLabel}>Correct answer</Text>
-            <Text style={styles.reveal}>{card.answer}</Text>
-            {card.variations && card.variations.length > 0 && (
-              <>
-                <Text style={layout.fieldLabel}>Variations</Text>
-                <Text style={styles.reveal}>{card.variations.join(', ')}</Text>
-              </>
-            )}
-            <View style={[styles.rateRow, styles.rateRowFirst]}>
-              <Button title="Again" onPress={() => submitRating('again')} />
+        {step === "rate" && (
+          <View style={styles.rateSection}>
+            <CardComponent style={styles.answerCard}>
+              <Text style={typography.answer}>{card.answer}</Text>
+              {card.variations && card.variations.length > 0 && (
+                <Text style={[typography.secondary, styles.variations]}>
+                  {card.variations.join(", ")}
+                </Text>
+              )}
+            </CardComponent>
+
+            <View style={styles.ratingButtons}>
+              <RatingButton
+                variant="again"
+                onPress={() => submitRating("again")}
+              >
+                Again
+              </RatingButton>
+              <RatingButton variant="good" onPress={() => submitRating("good")}>
+                Good
+              </RatingButton>
+              <RatingButton variant="easy" onPress={() => submitRating("easy")}>
+                Easy
+              </RatingButton>
             </View>
-            <View style={styles.rateRow}>
-              <Button title="Good" onPress={() => submitRating('good')} />
-            </View>
-            <View style={styles.rateRow}>
-              <Button title="Easy" onPress={() => submitRating('easy')} />
-            </View>
-            <Button title="Back" onPress={() => goTo('home')} />
-          </>
+          </View>
         )}
       </ScrollView>
-    </View>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  contextBody: {
-    fontSize: 18,
-    marginBottom: 16,
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 32,
   },
-  reveal: {
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  contextCard: {
+    marginBottom: 24,
+  },
+  answerSection: {
+    gap: 16,
+  },
+  input: {
+    backgroundColor: "#1E293B",
+    borderRadius: 16,
+    minHeight: 120,
+    padding: 16,
     fontSize: 16,
-    marginBottom: 16,
+    color: "#E2E8F0",
+    textAlignVertical: "top",
   },
-  rateRow: {
-    marginBottom: 8,
+  rateSection: {
+    gap: 24,
   },
-  rateRowFirst: {
+  answerCard: {
+    marginBottom: 0,
+  },
+  variations: {
     marginTop: 8,
   },
-  doneLine: {
-    fontSize: 20,
-    marginBottom: 20,
-    textAlign: 'center',
+  ratingButtons: {
+    gap: 12,
   },
 });

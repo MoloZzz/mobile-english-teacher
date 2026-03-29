@@ -1,6 +1,13 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { layout } from "../styles/shared";
+import {
+  Card,
+  PrimaryButton,
+  ScreenContainer,
+  SecondaryButton,
+} from "../components";
+import { layout, typography } from "../styles/shared";
 import { useCardStore, useScreenStore } from "../store";
 
 export function HomeScreen() {
@@ -10,48 +17,55 @@ export function HomeScreen() {
   const clearCards = useCardStore((s) => s.clearCards);
   const goTo = useScreenStore((s) => s.goTo);
 
-  console.log("HomeScreen render, hasCards:", hasCards, "dueCount:", dueCount);
-
   return (
-    <View style={layout.centered}>
-      <Text style={styles.title}>Sentence Trainer</Text>
-      <Text style={styles.dueLine}>Due cards: {dueCount}</Text>
-      <View style={styles.actions}>
-        <Button title="Start Training" onPress={() => goTo("training")} />
-        <View style={styles.vGap} />
-        {!hasCards && (
-          <>
-            <Button title="Import starter pack" onPress={importStarterCards} />
-            <View style={styles.vGap} />
-          </>
-        )}
-        {hasCards && (
-          <>
-            <Button title="Clear Cards (Debug)" onPress={clearCards} />
-            <View style={styles.vGap} />
-          </>
-        )}
-        <Button title="Add Card" onPress={() => goTo("create")} />
+    <ScreenContainer>
+      <View style={styles.container}>
+        <Text style={typography.title}>Sentence Trainer</Text>
+
+        <Card style={styles.dueCard}>
+          <Text style={typography.subtitle}>Due cards: {dueCount}</Text>
+        </Card>
+
+        <View style={styles.actions}>
+          <PrimaryButton onPress={() => goTo("training")}>
+            Start Training
+          </PrimaryButton>
+
+          {!hasCards && (
+            <SecondaryButton onPress={importStarterCards}>
+              Import Starter Pack
+            </SecondaryButton>
+          )}
+
+          {hasCards && (
+            <SecondaryButton onPress={clearCards}>
+              Clear Cards (Debug)
+            </SecondaryButton>
+          )}
+
+          <SecondaryButton onPress={() => goTo("create")}>
+            Add Card
+          </SecondaryButton>
+        </View>
       </View>
-    </View>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 22,
-    fontWeight: "600",
-    marginBottom: 12,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  dueLine: {
-    fontSize: 16,
-    marginBottom: 24,
+  dueCard: {
+    marginBottom: 32,
+    minWidth: 200,
+    alignItems: "center",
   },
   actions: {
     width: "100%",
     maxWidth: 280,
-  },
-  vGap: {
-    height: 12,
+    gap: 12,
   },
 });

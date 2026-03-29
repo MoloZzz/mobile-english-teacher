@@ -87,19 +87,9 @@ export const useCardStore = create<CardsState>()(
 
       importStarterCards: () => {
         const { cards } = get();
-        console.log(
-          "importStarterCards called, current cards length:",
-          cards.length,
-        );
-        console.log("starterCards length:", starterCards.length);
-        if (cards.length > 0) {
-          console.log("Cards already exist, skipping import");
-          return;
-        }
+        if (cards.length > 0) return;
         const now = Date.now();
-        console.log("Importing starter cards...");
-        starterCards.forEach((starterCard, index) => {
-          console.log(`Adding card ${index + 1}:`, starterCard.context);
+        starterCards.forEach((starterCard) => {
           get().addCard({
             context: starterCard.context,
             answer: starterCard.answer,
@@ -109,11 +99,9 @@ export const useCardStore = create<CardsState>()(
             interval: 1,
           });
         });
-        console.log("Import complete, new cards length:", get().cards.length);
       },
 
       clearCards: () => {
-        console.log("Clearing all cards");
         set({ cards: [] });
       },
     }),
