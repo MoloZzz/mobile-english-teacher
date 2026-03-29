@@ -1,1 +1,1 @@
-export type { Card } from './card';
+export type { Card, Attempt } from "./card";

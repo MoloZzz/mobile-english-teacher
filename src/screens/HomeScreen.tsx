@@ -85,6 +85,10 @@ export function HomeScreen() {
             Topics
           </SecondaryButton>
 
+          <SecondaryButton onPress={() => goTo("analytics")}>
+            Analytics
+          </SecondaryButton>
+
           {!hasCards && (
             <SecondaryButton onPress={importStarterCards}>
               Import Starter Pack

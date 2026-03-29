@@ -6,6 +6,7 @@ import { CreateScreen } from "./src/screens/CreateScreen";
 import { HomeScreen } from "./src/screens/HomeScreen";
 import { TopicsScreen } from "./src/screens/TopicsScreen";
 import { TrainingScreen } from "./src/screens/TrainingScreen";
+import { AnalyticsScreen } from "./src/screens/AnalyticsScreen";
 import { layout } from "./src/styles/shared";
 import { useCardStore, useScreenStore } from "./src/store";
 
@@ -29,6 +30,7 @@ export default function App() {
           {screen === "create" && <CreateScreen />}
           {screen === "training" && <TrainingScreen />}
           {screen === "topics" && <TopicsScreen />}
+          {screen === "analytics" && <AnalyticsScreen />}
         </>
       )}
       <StatusBar style="auto" />

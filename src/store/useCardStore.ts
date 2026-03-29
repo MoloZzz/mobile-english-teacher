@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import type { Card } from "../types";
+import type { Card, Attempt } from "../types";
 import { applySrsToCard, type SrsRating } from "../utils/srs";
 import { cards as backendCards } from "../data/backend";
 import { cards as meetingsCards } from "../data/meetings";
@@ -19,6 +19,7 @@ type CardsState = {
   selectedTopic: string;
   learningGoal: number;
   learnedCardIds: string[];
+  attempts: Attempt[];
   isHydrated: boolean;
   init: () => Promise<void>;
   addCard: (payload: Omit<Card, "id" | "isLearned"> & { id?: string }) => void;
@@ -31,6 +32,7 @@ type CardsState = {
   setLearningGoal: (goal: number) => void;
   getProgress: () => number;
   getTopicStats: (topic: string) => { learned: number; total: number };
+  addAttempt: (attempt: Attempt) => void;
 };
 
 export const useCardStore = create<CardsState>()(
@@ -40,6 +42,7 @@ export const useCardStore = create<CardsState>()(
       selectedTopic: "All",
       learningGoal: 3000,
       learnedCardIds: [],
+      attempts: [],
       isHydrated: false,
 
       init: async () => {
@@ -199,6 +202,10 @@ export const useCardStore = create<CardsState>()(
           };
         }
       },
+
+      addAttempt: (attempt) => {
+        set((s) => ({ attempts: [...s.attempts, attempt] }));
+      },
     }),
     {
       name: "card-storage",
@@ -208,6 +215,7 @@ export const useCardStore = create<CardsState>()(
         selectedTopic: state.selectedTopic,
         learningGoal: state.learningGoal,
         learnedCardIds: state.learnedCardIds,
+        attempts: state.attempts,
       }),
       skipHydration: true,
     },

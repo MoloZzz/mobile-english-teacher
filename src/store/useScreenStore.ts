@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type AppScreen = "home" | "create" | "training" | "topics";
+export type AppScreen = "home" | "create" | "training" | "topics" | "analytics";
 
 type ScreenStore = {
   screen: AppScreen;

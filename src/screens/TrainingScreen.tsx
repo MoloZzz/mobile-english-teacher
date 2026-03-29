@@ -10,11 +10,13 @@ import {
 } from "../components";
 import { layout, typography } from "../styles/shared";
 import { useCardStore, useScreenStore } from "../store";
+import { classifyAnswer } from "../utils/similarity";
 
 type Step = "answer" | "revealed";
 
 export function TrainingScreen() {
-  const updateCard = useCardStore((s) => s.updateCard);
+  const reviewCard = useCardStore((s) => s.reviewCard);
+  const addAttempt = useCardStore((s) => s.addAttempt);
   const goTo = useScreenStore((s) => s.goTo);
 
   const [dueQueue, setDueQueue] = useState<Card[]>([]);
@@ -32,10 +34,19 @@ export function TrainingScreen() {
   const done = dueQueue.length === 0 || cursor >= dueQueue.length;
   const card = done ? undefined : dueQueue[cursor];
 
-  function markLearned() {
+  function handleRating(rating: "dontKnow" | "know") {
     if (!card) return;
-    updateCard({ ...card, isLearned: true });
-    useCardStore.getState().learnedCardIds.push(card.id);
+    const attempt = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
+      cardId: card.id,
+      topic: card.topic,
+      userInput: draftAnswer,
+      correctAnswer: card.answer,
+      result: classifyAnswer(draftAnswer, card.answer),
+      timestamp: Date.now(),
+    };
+    addAttempt(attempt);
+    reviewCard(card.id, rating);
     nextCard();
   }
 
@@ -109,9 +120,11 @@ export function TrainingScreen() {
             </CardComponent>
 
             <View style={styles.actionButtons}>
-              <SecondaryButton onPress={nextCard}>Next</SecondaryButton>
-              <PrimaryButton onPress={markLearned}>
-                Already learned
+              <SecondaryButton onPress={() => handleRating("dontKnow")}>
+                Don't know
+              </SecondaryButton>
+              <PrimaryButton onPress={() => handleRating("know")}>
+                Know
               </PrimaryButton>
             </View>
           </View>

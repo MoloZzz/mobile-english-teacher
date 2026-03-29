@@ -13,3 +13,16 @@ export type Card = {
   dueDate: number;
   interval: number;
 };
+
+export type Attempt = {
+  id: string;
+  cardId: string;
+  topic: string;
+
+  userInput: string;
+  correctAnswer: string;
+
+  result: "correct" | "almost" | "wrong";
+
+  timestamp: number;
+};
